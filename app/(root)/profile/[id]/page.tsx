@@ -1,0 +1,18 @@
+import Header from "@/components/Header";
+
+
+const page = async({params}: ParamsWithSearch) => {
+    const { id } = await params;
+  return (
+    <div className="Wrapper page">
+
+        <Header subHeader="harshoct03@gmail.com" title="Harsh | Web developer"
+            userImg="/assets/images/dummy.jpg" />
+        <h1 className="text-2xl font-karla">
+        USER ID: {id}
+        </h1>
+    </div>
+  )
+}
+
+export default page
