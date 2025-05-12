@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Harsh-Agarwal-s-workspace-roqfu2.us-east-1.xata.sh/db/jsm_livecapshare",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}

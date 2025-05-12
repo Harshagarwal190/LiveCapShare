@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "sql_6c55bfcb7e93cb",
+    "operations": [
+      {
+        "sql": {
+          "up": "CREATE TABLE session (id text PRIMARY KEY NOT NULL, expires_at timestamp NOT NULL, token text NOT NULL, created_at timestamp NOT NULL, updated_at timestamp NOT NULL, ip_address text, user_agent text, user_id text NOT NULL, CONSTRAINT session_token_unique UNIQUE (token))"
+        }
+      }
+    ]
+  },
+  "migrationType": "inferred",
+  "name": "sql_6c55bfcb7e93cb",
+  "parent": "sql_9e05e60a2d6cbf",
+  "schema": "public",
+  "startedAt": "2025-05-12T11:52:02.101596Z"
+}
