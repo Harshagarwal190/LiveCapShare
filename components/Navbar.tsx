@@ -1,12 +1,17 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
-const user = {}; // Adjust this logic as needed — maybe use actual auth data
+const user = {};
 
 const Navbar = () => {
   const router = useRouter();
+
+  const { data: session } = authClient.useSession();
+
+  const user = session?.user;
 
   return (
     <header className="navbar">
@@ -22,20 +27,29 @@ const Navbar = () => {
         </Link>
 
         {user && (
-          <figure className="flex items-center gap-4">
-            <button
-              aria-label="Go to profile"
-              onClick={() => router.push("/profile/123456")}
-            >
+          <figure>
+            <button onClick={() => router.push(`/profile/${user.id}`)}>
               <Image
-                src="/assets/images/dummy.jpg"
+                src={user.image || "/assets/images/dummy.jpg"}
                 alt="User"
                 width={36}
                 height={36}
                 className="rounded-full aspect-square"
               />
             </button>
-            <button className="cursor-pointer" aria-label="Log out">
+
+            <button
+              onClick={async () => {
+                return await authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      redirect("/sign-in");
+                    },
+                  },
+                });
+              }}
+              className="cursor-pointer"
+            >
               <Image
                 src="/assets/icons/logout.svg"
                 alt="logout"

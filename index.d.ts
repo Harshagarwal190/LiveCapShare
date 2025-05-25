@@ -71,6 +71,7 @@ declare interface SearchResult {
 
 declare interface VideoCardProps {
   id: string;
+  videoId: string;
   title: string;
   thumbnail: string;
   userImg: string;

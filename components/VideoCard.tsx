@@ -4,6 +4,7 @@ import Link from "next/link";
 
 const VideoCard = ({
   id,
+  videoId,
   title,
   thumbnail,
   userImg,
@@ -14,7 +15,7 @@ const VideoCard = ({
   duration,
 }: VideoCardProps) => {
   return (
-    <Link href={`/video/${id}`} className="video-card">
+    <Link href={`/video/${videoId}`} className="video-card">
       <Image
         src={thumbnail}
         alt="thumbnail"
@@ -55,17 +56,12 @@ const VideoCard = ({
           })}
         </h2>
       </article>
-      <button onClick={()=> {}} className="copy-btn">
-        <Image
-          src="/assets/icons/link.svg"
-          alt="copy"
-          width={18}
-          height={18} />
+      <button onClick={() => {}} className="copy-btn">
+        <Image src="/assets/icons/link.svg" alt="copy" width={18} height={18} />
       </button>
-      {duration &&
-      <div className="duration">
-        {Math.ceil(duration / 60)}min
-        </div>}
+      {duration && (
+        <div className="duration">{Math.ceil(duration / 60)}min</div>
+      )}
     </Link>
   );
 };

@@ -88,7 +88,10 @@ const page = () => {
       if(!videoUploadUrl || !videoAccessKey) throw new Error("Failed to get video upload credentials")
         //upload the video to bunny
       await uploadFileToBunny(video.file,videoUploadUrl,videoAccessKey)
-
+      console.log("value deatils")
+      console.log(uploadFileToBunny)
+      console.log(videoUploadUrl)
+      console.log(videoAccessKey)
 
 
       //upload the thumbnail to DB
@@ -117,7 +120,7 @@ if (!thumbnailUploadUrl || !thumbnailCdnUrl || !thumbnailAccessKey)
    thumbnailUrl: thumbnailCdnUrl,
    ...formData,
    duration: videoDuration,
-   videoUrl: undefined
+   videoUrl: videoUploadUrl
  })
 
  router.push('/video/${videoId}')
