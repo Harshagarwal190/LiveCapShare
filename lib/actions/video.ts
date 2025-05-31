@@ -4,6 +4,7 @@ import {
   apiFetch,
   doesTitleMatch,
   getEnv,
+  // getOrderByClause,
   withErrorHandling,
 } from "@/lib/utils";
 import { auth } from "@/lib/auth";
@@ -14,7 +15,7 @@ import { user, videos } from "@/drizzle/schema";
 import { revalidatePath } from "next/cache";
 import { fixedWindow, request } from "@arcjet/next";
 import aj from "../arcjet";
-import { and, eq, or, sql } from "drizzle-orm";
+import { and, eq, ilike, or, sql, desc } from "drizzle-orm";
 
 const VIDEO_STREAM_BASE_URL = BUNNY.STREAM_BASE_URL;
 const THUMBNAIL_STORAGE_BASE_URL = BUNNY.STORAGE_BASE_URL;
@@ -180,7 +181,17 @@ export const getAllVideos = withErrorHandling(
 );
 
 function getOrderByClause(sortFilter: string): any {
-  throw new Error("Function not implemented.");
+  // Add more sort options as needed
+  switch (sortFilter) {
+    case "oldest":
+      return sql`${videos.createdAt} ASC`;
+    case "title":
+      return sql`${videos.title} ASC`;
+    case "title-desc":
+      return sql`${videos.title} DESC`;
+    default:
+      return sql`${videos.createdAt} DESC`;
+  }
 }
 
 export const getVideoById = withErrorHandling(async (videoId: string) => {
@@ -190,3 +201,41 @@ export const getVideoById = withErrorHandling(async (videoId: string) => {
 
   return videoRecord;
 });
+
+export const getAllVideosByUser = withErrorHandling(
+  async (
+    userIdParameter: string,
+    searchQuery: string = "",
+    sortFilter?: string
+  ) => {
+    const currentUserId = (
+      await auth.api.getSession({ headers: await headers() })
+    )?.user.id;
+    const isOwner = userIdParameter === currentUserId;
+
+    const [userInfo] = await db
+      .select({
+        id: user.id,
+        name: user.name,
+        image: user.image,
+        email: user.email,
+      })
+      .from(user)
+      .where(eq(user.id, userIdParameter));
+    if (!userInfo) throw new Error("User not found");
+
+    const conditions = [
+      eq(videos.userId, userIdParameter),
+      !isOwner && eq(videos.visibility, "public"),
+      searchQuery.trim() && ilike(videos.title, `%${searchQuery}%`),
+    ].filter(Boolean) as any[];
+
+    const userVideos = await buildVideoWithUserQuery()
+      .where(and(...conditions))
+      .orderBy(
+        sortFilter ? getOrderByClause(sortFilter) : desc(videos.createdAt)
+      );
+
+    return { user: userInfo, videos: userVideos, count: userVideos.length };
+  }
+);
