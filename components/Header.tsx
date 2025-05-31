@@ -2,6 +2,8 @@ import { ICONS } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import DropdownList from "./DropdownList";
+import { ZodRecord } from "better-auth";
+import RecordScreen from "./RecordScreen";
 
 const Header = ({ subHeader, title, userImg }: SharedHeaderProps) => {
   return (
@@ -10,7 +12,7 @@ const Header = ({ subHeader, title, userImg }: SharedHeaderProps) => {
         <div className="details">
           {userImg && (
             <Image
-              src={userImg }
+              src={userImg}
               alt="User"
               width={66}
               height={66}
@@ -34,7 +36,7 @@ const Header = ({ subHeader, title, userImg }: SharedHeaderProps) => {
             />
             <span> Upload a Video</span>
           </Link>
-          <div className="record">
+          {/* <div className="record">
             <button className="primary-btn">
               <Image
                 src="/assets/icons/record.svg"
@@ -44,21 +46,23 @@ const Header = ({ subHeader, title, userImg }: SharedHeaderProps) => {
               />
               <span> Record a vedio</span>
             </button>
-          </div>
+          </div> */}
+          <RecordScreen />
         </aside>
       </section>
       <section className="search-filter">
         <div className="search">
-            <input
-                type="text"
-                placeholder="Search for videos, tags, folders.."
-           />
+          <input type="text" placeholder="Search for videos, tags, folders.." />
 
-           <Image src="/assets/icons/search.svg" alt="search" width={16} height={16} />
+          <Image
+            src="/assets/icons/search.svg"
+            alt="search"
+            width={16}
+            height={16}
+          />
         </div>
-   
 
-     <DropdownList />
+        <DropdownList />
       </section>
     </header>
   );
