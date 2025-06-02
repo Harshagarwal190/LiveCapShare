@@ -25,7 +25,8 @@ const ProfilePage = async ({ params, searchParams }: ParamsWithSearch) => {
           {videos.map(({ video }) => (
             <VideoCard
               key={video.id}
-              id={video.videoId}
+              id={video.id}
+              videoId={video.videoId}
               title={video.title}
               thumbnail={video.thumbnailUrl}
               createdAt={video.createdAt}
@@ -34,7 +35,7 @@ const ProfilePage = async ({ params, searchParams }: ParamsWithSearch) => {
               views={video.views}
               visibility={video.visibility}
               duration={video.duration}
-              videoId={""}
+              
             />
           ))}
         </section>
