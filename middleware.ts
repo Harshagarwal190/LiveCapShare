@@ -5,23 +5,29 @@ import { createMiddleware, detectBot, shield } from "@arcjet/next";
 import aj from "./lib/arcjet";
 
 export async function middleware(request: NextRequest) {
+  const publicPaths = ["/", "/sign-in", "/about", "/privacy"];
+
+  // Allow requests to public paths without session
+  if (publicPaths.includes(request.nextUrl.pathname)) {
+    return NextResponse.next();
+  }
+
+  // Get session info
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  if (request.nextUrl.pathname === "/sign-in") {
-    return NextResponse.next();
-  }
-
-  // If no session is found, redirect to /sign-in
+  // If no session, redirect to /sign-in
   if (!session) {
     console.log("Session not found, redirecting to /sign-in");
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
+  // User is authenticated, continue
   return NextResponse.next();
 }
-// shield protection by help of arcjet
+
+// Shield protection by help of arcjet
 const validate = aj
   .withRule(
     shield({
@@ -35,8 +41,12 @@ const validate = aj
     })
   );
 
+// Export middleware with arcjet bot protection
 export default createMiddleware(validate);
 
+// Exclude api, _next static files, favicon, sign-in, assets, root, about, privacy
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sign-in|assets).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|sign-in|assets|^$|about|privacy).*)",
+  ],
 };
