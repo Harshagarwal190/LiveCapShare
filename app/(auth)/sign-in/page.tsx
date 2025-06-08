@@ -1,17 +1,25 @@
 "use client";
+import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import Link from 'next/link'
+import Link from "next/link";
 import Image from "next/image";
 
-const page = () => {
+const Page = () => {
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSignIn = async () => {
-    return await authClient.signIn.social({ provider: "google" });
+    setIsLoading(true);
+    try {
+      await authClient.signIn.social({ provider: "google" });
+      // You can handle post sign-in logic here if needed
+    } catch (error) {
+      console.error("Sign-in failed", error);
+      setIsLoading(false);
+    }
   };
 
-
   return (
-     <main className="sign-in">
+    <main className="sign-in">
       <aside className="testimonial">
         <Link href="/">
           <Image
@@ -59,7 +67,7 @@ const page = () => {
         </div>
       </aside>
 
-    <aside className="google-sign-in">
+      <aside className="google-sign-in">
         <section>
           <Link href="/">
             <Image
@@ -71,19 +79,26 @@ const page = () => {
             <h1>LivCapShare</h1>
           </Link>
           <p>
-            {" "}
             Create and Share your very first <span>SnapCast Video</span> in no
             time!
           </p>
-          <button onClick={handleSignIn}>
-            <Image src="/assets/icons/google.svg" alt="google" width={22} height={22} />
-            <span>Sign in with Google</span>
+
+          <button onClick={handleSignIn} disabled={isLoading}>
+          {isLoading ? "" : <Image
+              src="/assets/icons/google.svg"
+              alt="google"
+              width={22}
+              height={22}
+            />}
+            
+            <span>{isLoading ? "Signing in..." : "Sign in with Google"}</span>
           </button>
         </section>
       </aside>
+
       <div className="overlay" />
     </main>
-  )
-}
+  );
+};
 
-export default page
+export default Page;

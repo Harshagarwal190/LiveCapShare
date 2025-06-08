@@ -3,6 +3,8 @@ import { Karla } from "next/font/google";
 import "./globals.css";
 import { satoshi } from "../fonts/font";
 import NextTopLoader from "nextjs-toploader";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const geistKarla = Karla({
   variable: "--font-geist-karla",
@@ -42,7 +44,9 @@ export default function Layout({
           zIndex={1600}
           showAtBottom={false}
         />
+        <Navbar />
         {children}
+        <Footer/>
       </body>
     </html>
   );
