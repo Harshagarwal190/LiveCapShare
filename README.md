@@ -12,7 +12,7 @@ LiveCapShare is a modern, interactive video sharing platform built with Next.js,
 - Custom icons and assets
 
 ## 🎥 Preview
-![LiveCapShare Preview](URL_ADDRESS.com/your-username/LiveCapShare/assets/your-username/your-image-id)
+![LiveCapShare Preview](https://github.com/user-attachments/assets/f2d0846e-faca-4c11-ab37-21fd95877049)
 
 ## 🛠️ Tech Stack
 - [Next.js](https://nextjs.org/) (App Router)
